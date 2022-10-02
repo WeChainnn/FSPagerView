@@ -18,7 +18,7 @@ open class FSPagerViewCell: UICollectionViewCell {
         }
         let view = UIView(frame: .zero)
         view.isUserInteractionEnabled = false
-        view.backgroundColor = UIColor.black.withAlphaComponent(0.6)
+//        view.backgroundColor = UIColor.black.withAlphaComponent(0.6)
         
         let textLabel = UILabel(frame: .zero)
         textLabel.textColor = .white
@@ -48,7 +48,7 @@ open class FSPagerViewCell: UICollectionViewCell {
     fileprivate weak var _imageView: UIImageView?
     
     fileprivate let kvoContext = UnsafeMutableRawPointer(bitPattern: 0)
-    fileprivate let selectionColor = UIColor(white: 0.2, alpha: 0.2)
+    open var selectionColor = UIColor(white: 0.2, alpha: 0.2)
     
     fileprivate weak var _selectedForegroundView: UIView?
     fileprivate var selectedForegroundView: UIView? {
@@ -101,24 +101,18 @@ open class FSPagerViewCell: UICollectionViewCell {
     fileprivate func commonInit() {
         self.contentView.backgroundColor = UIColor.clear
         self.backgroundColor = UIColor.clear
-        self.contentView.layer.shadowColor = UIColor.black.cgColor
-        self.contentView.layer.shadowRadius = 5
-        self.contentView.layer.shadowOpacity = 0.75
-        self.contentView.layer.shadowOffset = .zero
+//        self.contentView.layer.shadowColor = UIColor.black.cgColor
+//        self.contentView.layer.shadowRadius = 5
+//        self.contentView.layer.shadowOpacity = 0.75
+//        self.contentView.layer.shadowOffset = .zero
+        self.commomView()
     }
     
-    deinit {
-        if let textLabel = _textLabel {
-            textLabel.removeObserver(self, forKeyPath: "font", context: kvoContext)
-        }
-    }
-    
-    override open func layoutSubviews() {
-        super.layoutSubviews()
-        if let imageView = _imageView {
+    func commomView() {
+        if let imageView = self.imageView {
             imageView.frame = self.contentView.bounds
         }
-        if let textLabel = _textLabel {
+        if let textLabel = self.textLabel {
             textLabel.superview!.frame = {
                 var rect = self.contentView.bounds
                 let height = textLabel.font.pointSize*1.5
@@ -134,9 +128,19 @@ open class FSPagerViewCell: UICollectionViewCell {
                 return rect
             }()
         }
-        if let selectedForegroundView = _selectedForegroundView {
+        if let selectedForegroundView = self.selectedForegroundView {
             selectedForegroundView.frame = self.contentView.bounds
         }
+    }
+    
+    deinit {
+        if let textLabel = _textLabel {
+            textLabel.removeObserver(self, forKeyPath: "font", context: kvoContext)
+        }
+    }
+    
+    override open func layoutSubviews() {
+        super.layoutSubviews()
     }
 
     open override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
